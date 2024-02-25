@@ -16,20 +16,22 @@ module.exports = defineConfig({
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  /* Number of retries when test is failed. "process.env.CI ? 2" shall be added if you want retries to be on CI only */
+  retries: 5,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  workers: 3,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [['junit', { outputFile: 'test-results/e2e-junit-results.xml' }]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://127.0.0.1:3000',
-
+    // baseURL: process.env.STAGING === '1' ? 'https://www.nordeapension.dk/' : 'https://www.nordeapension.dk/',
+    
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
+    // Viewport used for all pages in the context.
+    viewport: { width: 1280, height: 920 },
   },
+
 
   /* Configure projects for major browsers */
   projects: [
