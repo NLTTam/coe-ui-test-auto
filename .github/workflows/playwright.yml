@@ -17,13 +17,10 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
-    - name: Install Allure CLI
-      run: |
-        curl -fsSL https://raw.githubusercontent.com/allure-framework/allure-cli/master/scripts/install_allure_cli.sh | bash
     - name: Run Playwright tests
       run: npx playwright test --reporter=line,allure-playwright
     - name: Allure generate report
-      run: allure generate allure-results -o allure-report --clean
+      run: npx allure-commandline generate allure-results -o allure-report --clean
     - uses: actions/upload-artifact@v3
       if: always()
       with:
