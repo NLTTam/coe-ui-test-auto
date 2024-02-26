@@ -66,8 +66,8 @@ test.describe("Swag Labs Inventory page", () => {
     const password = "secret_sauce";
     await inventory.navigateToInventoryPage(username, password);
 
-    await inventory.sort.click(); // Click on sort dropdown (force required for Playwright 1.30+)
-    await inventory.sort.click("az"); // Select "Name (A to Z)"
+    await inventory.sort.click();
+    await inventory.sort.selectOption("az"); // Select "Name (Z to A)"
 
     const productNames = await page
       .locator(".inventory_item_name")
