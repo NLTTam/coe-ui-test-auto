@@ -1,9 +1,10 @@
 const { test, expect } = require("@playwright/test");
 const { Inventory } = require("../pages/inventory-page");
-const { Login } = require("../pages/login-page");
 
-test.describe("Swag Labs Inventory page", () => {
-  test("Check element in Inventory page", async ({ page }) => {
+test.describe("Inventory page", () => {
+  test("TC08_Verify if element in Inventory page is correct", async ({
+    page,
+  }) => {
     const inventory = new Inventory(page);
 
     const username = "standard_user";
@@ -32,7 +33,7 @@ test.describe("Swag Labs Inventory page", () => {
     await inventory.checkSortElement();
   });
 
-  test('Click "Add to Cart", change button to "Remove" and update cart count', async ({
+  test("TC09_Verify that user can add an item to shopping cart", async ({
     page,
   }) => {
     const inventory = await new Inventory(page);
@@ -44,7 +45,7 @@ test.describe("Swag Labs Inventory page", () => {
     await inventory.addToCart("sauce-labs-fleece-jacket");
   });
 
-  test('Click "Add to Cart" two item, and Click remove one item', async ({
+  test("TC10_Verify user can remove an item out of shopping cart and expect shopping cart badge is decreased by 1", async ({
     page,
   }) => {
     const inventory = await new Inventory(page);
@@ -59,7 +60,23 @@ test.describe("Swag Labs Inventory page", () => {
     await inventory.removeItem("sauce-labs-onesie");
   });
 
-  test("should sort products by name (A-Z)", async ({ page }) => {
+  test("TC15_Verify user can logout", async ({ page }) => {
+    const inventory = new Inventory(page);
+
+    const username = "standard_user";
+    const password = "secret_sauce";
+    await inventory.navigateToInventoryPage(username, password);
+
+    await inventory.menuBar.waitFor();
+    await inventory.menuBar.click(); //expand the menu bar
+    await inventory.sideBar_logout.waitFor();
+    await inventory.sideBar_logout.click(); //logout function execute
+
+    await expect(page.url()).not.toContain("inventory.html");
+  });
+});
+test.describe("Sorting function", () => {
+  test("TC11_Verify user can sort products by name (A-Z)", async ({ page }) => {
     const inventory = await new Inventory(page);
 
     const username = "standard_user";
@@ -76,7 +93,7 @@ test.describe("Swag Labs Inventory page", () => {
     expect(productNames).toEqual(productNames.slice().sort()); // Check ascending order
   });
 
-  test("should sort products by name (Z-A)", async ({ page }) => {
+  test("TC12_Verify user can sort products by name (Z-A)", async ({ page }) => {
     const inventory = await new Inventory(page);
 
     const username = "standard_user";
@@ -93,7 +110,9 @@ test.describe("Swag Labs Inventory page", () => {
     expect(productNames).toEqual(productNames.slice().sort().reverse()); // Check descending order
   });
 
-  test("should sort products by price (low to high)", async ({ page }) => {
+  test("TC13_Verify user can sort products by price (low to high)", async ({
+    page,
+  }) => {
     const inventory = await new Inventory(page);
 
     const username = "standard_user";
@@ -110,7 +129,9 @@ test.describe("Swag Labs Inventory page", () => {
     expect(productPrices).toEqual(productPrices.slice().sort((a, b) => a - b)); // Check ascending order
   });
 
-  test("should sort products by price (high to low)", async ({ page }) => {
+  test("TC14_Verify user can sort products by price (high to low)", async ({
+    page,
+  }) => {
     const inventory = await new Inventory(page);
 
     const username = "standard_user";
@@ -125,20 +146,5 @@ test.describe("Swag Labs Inventory page", () => {
       .allTextContents();
 
     expect(productPrices).toEqual(productPrices.slice().sort((a, b) => b - a)); // Check descending order
-  });
-
-  test("Logout function", async ({ page }) => {
-    const inventory = new Inventory(page);
-
-    const username = "standard_user";
-    const password = "secret_sauce";
-    await inventory.navigateToInventoryPage(username, password);
-
-    await inventory.menuBar.waitFor();
-    await inventory.menuBar.click(); //expand the menu bar
-    await inventory.sideBar_logout.waitFor();
-    await inventory.sideBar_logout.click(); //logout function execute
-
-    await expect(page.url()).not.toContain("inventory.html");
   });
 });

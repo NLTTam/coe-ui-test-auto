@@ -1,8 +1,10 @@
 const { test, expect } = require("@playwright/test");
 const { Login } = require("../pages/login-page");
 
-test.describe("Swag Labs Login", () => {
-  test("Login with valid credentials", async ({ page }) => {
+test.describe("Login page", async () => {
+  test("TC01_Verify that standard user can login successfully with valid credentials", async ({
+    page,
+  }) => {
     const login = new Login(page);
 
     await login.navigateToLoginPage();
@@ -18,17 +20,21 @@ test.describe("Swag Labs Login", () => {
     expect(page.url()).toContain("inventory.html");
   });
 
-  test("Check elements on login page", async ({ page }) => {
+  test("TC02_ Verify that elements on login page is correct", async ({
+    page,
+  }) => {
     const login = new Login(page);
 
     await login.navigateToLoginPage();
-  
+
     await expect(login.logo).toBe("Swag Labs");
     expect(login.username).toBeTruthy();
     expect(login.password).toBeTruthy();
   });
 
-  test("Login with invalid credentials", async ({ page }) => {
+  test("TC03_Verify that error message will be shown when user entered invalid credentials", async ({
+    page,
+  }) => {
     const username = "standard_user";
     const password = "secret_sauces";
 
@@ -36,10 +42,11 @@ test.describe("Swag Labs Login", () => {
     await login.loginWithInvalidCredentials(username, password);
 
     await expect(page.url()).not.toContain("inventory.html");
-
   });
 
-  test("Check if access without login", async ({ page }) => {
+  test("TC04_Verify that user cannot access without login", async ({
+    page,
+  }) => {
     await page.goto("https://saucedemo.com/inventory.html");
 
     const errorMessage = await page

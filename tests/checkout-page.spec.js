@@ -1,8 +1,8 @@
 const { test, expect } = require("@playwright/test");
 const { Checkout } = require("../pages/checkout-page");
 
-test.describe("Swag Labs Inventory Details", () => {
-  test("Checkout", async ({ page }) => {
+test.describe("Checkout page", () => {
+  test("TC19_Verify element in Checkout page is correct", async ({ page }) => {
     const checkout = new Checkout(page);
 
     await page.goto("https://saucedemo.com/");
@@ -16,7 +16,7 @@ test.describe("Swag Labs Inventory Details", () => {
     
   });
 
-  test("Checkout complete", async ({ page }) => {
+  test("TC20_Verify user can checkout successfully", async ({ page }) => {
     const checkout = new Checkout(page);
 
     await page.goto("https://saucedemo.com/");

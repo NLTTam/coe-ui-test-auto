@@ -1,43 +1,49 @@
 const { test, expect } = require("@playwright/test");
 const { ShoppingCart } = require("../pages/shopping-cart-page");
 
-test.describe("Swag Labs Shopping Cart", () => {
-  test("Check if element in shopping cart page", async ({ page }) => {
+test.describe("Shopping Cart page", () => {
+  test("TC05_Verify element in shopping cart page is correct", async ({
+    page,
+  }) => {
     const shoppingcart = new ShoppingCart(page);
 
     await page.goto("https://saucedemo.com/");
 
     await shoppingcart.setup();
 
-    expect(page.url()).toContain('cart.html')
-    expect(shoppingcart.title).toBe('Your Cart')
-    expect(shoppingcart.cartDescLabel).toBe('Description')
-    expect(shoppingcart.cartQuantitiyLabel).toBe('QTY')
+    expect(page.url()).toContain("cart.html");
+    expect(shoppingcart.title).toBe("Your Cart");
+    expect(shoppingcart.cartDescLabel).toBe("Description");
+    expect(shoppingcart.cartQuantitiyLabel).toBe("QTY");
   });
 
-  test("Check countinue shopping and check button", async ({ page }) => {
+  test("TC06_Verify if user can use countinue shopping button and checkout button", async ({
+    page,
+  }) => {
     const shoppingcart = new ShoppingCart(page);
 
     await page.goto("https://saucedemo.com/");
 
     await shoppingcart.setup();
 
-    await shoppingcart.continueShopping()
+    await shoppingcart.continueShopping();
 
-    await page.goBack()
+    await page.goBack();
 
-    await shoppingcart.checkout()
+    await shoppingcart.checkout();
 
-    await page.click("#cancel")
+    await page.click("#cancel");
   });
 
-  test("Remove an item", async ({ page }) => {
+  test("TC07_ Verify that user can remove an item in the shopping cart", async ({
+    page,
+  }) => {
     const shoppingcart = new ShoppingCart(page);
 
     await page.goto("https://saucedemo.com/");
 
     await shoppingcart.setup();
 
-    await shoppingcart.removeFromCart("sauce-labs-onesie")
+    await shoppingcart.removeFromCart("sauce-labs-onesie");
   });
 });
